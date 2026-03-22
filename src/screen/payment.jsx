@@ -249,7 +249,10 @@ export default function PaymentScreen({ route, navigation }) {
 
     const { user } = useSelector((state) => state.auth);
     // Safe check for userId
-    const userid = user?.data?.userId;
+    const userid = user?.data?.userId || user?._id
+
+
+    console.log('useridd', userid)
 
     const { showNotify } = useNotify();
 
@@ -271,6 +274,9 @@ export default function PaymentScreen({ route, navigation }) {
     }, [orderId]); // Only fetch when orderId changes
 
     const handlePayment = async () => {
+        console.log('ordre', order, 'userid', userid)
+
+
         if (!order || !userid) {
 
             showNotify("ErrorSession expired. Please log in again");

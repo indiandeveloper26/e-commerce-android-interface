@@ -45,7 +45,7 @@ export default function TabNavigator() {
             })}
         >
             <Tab.Screen name="Home" component={HomeStackNavigaton} />
-            <Tab.Screen name="test" component={Notifu} />
+
             <Tab.Screen name="Orders" component={OrdersScreen} options={{ tabBarBadge: order }} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
