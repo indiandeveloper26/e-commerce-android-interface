@@ -18,6 +18,9 @@ export default function TabNavigator() {
     const { user } = useSelector((state) => state.auth);
     let order = user?.orders?.length || 0
 
+
+    console.log('orders', user)
+
     console.log('userdata', order)
     return (
         <Tab.Navigator

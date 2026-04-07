@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
     View, Text, Image, StyleSheet, TouchableOpacity,
-    ActivityIndicator, SafeAreaView, FlatList, LayoutAnimation, Platform, UIManager, StatusBar
+    ActivityIndicator, SafeAreaView, FlatList, LayoutAnimation, Platform, UIManager, StatusBar,
+    Alert
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -53,6 +54,23 @@ export default function CartScreen({ navigation }) {
         }
     };
 
+
+    const checkout = async (data) => {
+        try {
+            // अगर 'data' एक JSON string है, तो इसे एक बार पार्स करें
+
+
+            // अब आप सीधे parsedData का उपयोग कर सकते हैं
+            console.log(data.product.slug);
+
+
+            navigation.navigate('productd', { slug: data.product.slug });
+
+        } catch (error) {
+            console.error("Parsing error:", error);
+        }
+    }
+
     const totalItems = cart.reduce((sum, i) => sum + (i.quantity || 0), 0);
     const totalPrice = cart.reduce((sum, i) => sum + ((i.product?.price || 0) * (i.quantity || 0)), 0);
 
@@ -94,30 +112,39 @@ export default function CartScreen({ navigation }) {
                     </View>
                 }
                 renderItem={({ item }) => (
-                    <View style={styles.cartCard}>
-                        <Image
-                            source={{ uri: `${url}/${item.product?.images?.[0]}` }}
-                            style={styles.productImg}
-                        />
 
-                        <View style={styles.details}>
-                            <Text style={styles.prodName} numberOfLines={1}>{item.product?.name}</Text>
-                            <Text style={styles.prodPrice}>₹{item.product?.price}</Text>
+                    <TouchableOpacity onPress={() => checkout(item)}>
 
-                            <View style={styles.qtyContainer}>
-                                <TouchableOpacity style={styles.qtyBtn}><Text style={styles.qtySymbol}>-</Text></TouchableOpacity>
-                                <Text style={styles.qtyText}>{item.quantity}</Text>
-                                <TouchableOpacity style={styles.qtyBtn}><Text style={[styles.qtySymbol, { color: '#F54D27' }]}>+</Text></TouchableOpacity>
+
+                        <View style={styles.cartCard} >
+
+
+
+                            <Image
+                                source={{ uri: `${url}/${item.product?.images?.[0]}` }}
+                                style={styles.productImg}
+                            />
+
+                            <View style={styles.details}>
+                                <Text style={styles.prodName} numberOfLines={1}>{item.product?.name}</Text>
+                                <Text style={styles.prodPrice}>₹{item.product?.price}</Text>
+
+                                <View style={styles.qtyContainer}>
+                                    <TouchableOpacity style={styles.qtyBtn}><Text style={styles.qtySymbol}>-</Text></TouchableOpacity>
+                                    <Text style={styles.qtyText}>{item.quantity}</Text>
+                                    <TouchableOpacity style={styles.qtyBtn}><Text style={[styles.qtySymbol, { color: '#F54D27' }]}>+</Text></TouchableOpacity>
+                                </View>
+                            </View>
+
+                            <View style={styles.rightActions}>
+                                <Text style={styles.subtotal}>₹{item.product?.price * item.quantity}</Text>
+                                <TouchableOpacity onPress={() => handleDelete(item._id)} style={styles.deleteBtn}>
+                                    <Feather name="trash-2" size={18} color="#ef4444" />
+                                </TouchableOpacity>
                             </View>
                         </View>
 
-                        <View style={styles.rightActions}>
-                            <Text style={styles.subtotal}>₹{item.product?.price * item.quantity}</Text>
-                            <TouchableOpacity onPress={() => handleDelete(item._id)} style={styles.deleteBtn}>
-                                <Feather name="trash-2" size={18} color="#ef4444" />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    </TouchableOpacity>
                 )}
             />
 

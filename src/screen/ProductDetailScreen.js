@@ -43,6 +43,25 @@ export default function ProductDetailScreen({ route }) {
         }
     }, [apiResponse, slug]);
 
+
+
+    const buy = async () => {
+
+        if (!isLoggedIn) {
+            showNotify("Please login first!", "error");
+            return;
+        }
+
+        try {
+            AsyncStorage.setItem("buyNowProduct", JSON.stringify(product));
+            navigation.navigate('Checkout');
+        } catch (error) {
+            console.log('errro ', error)
+        }
+
+
+    }
+
     const handleAddToCart = async () => {
         if (!isLoggedIn) {
             showNotify("Please login first!", "error");
@@ -166,8 +185,7 @@ export default function ProductDetailScreen({ route }) {
                     <TouchableOpacity
                         style={styles.buyBtn}
                         onPress={() => {
-                            AsyncStorage.setItem("buyNowProduct", JSON.stringify(product));
-                            navigation.navigate('Checkout');
+                            buy()
                         }}
                     >
                         <Text style={styles.buyBtnText}>BUY NOW</Text>

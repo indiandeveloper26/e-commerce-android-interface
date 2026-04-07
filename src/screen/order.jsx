@@ -30,6 +30,8 @@ export default function OrdersScreen() {
             const res = await api.get(`/api/order/orderdata/${userId}`);
             if (res.data.success) {
                 setOrders(res.data.data.orders || []);
+
+                console.log('orderdata', res)
             }
         } catch (err) {
             setError("Could not load history");
